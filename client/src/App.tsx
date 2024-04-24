@@ -1,12 +1,22 @@
-import { Button } from './components/ui/button'
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { Home } from "./pages/Home"
+import { About } from "./pages/About"
+import { Profile } from "./pages/Profile"
+import { SignIn } from "./pages/SignIn"
+import { SignUp } from "./pages/SignUp"
 
 function App() {
 
   return (
-    <div className='text-3xl text-rose-500' >
-      Hello There
-      <Button>Click Here</Button>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

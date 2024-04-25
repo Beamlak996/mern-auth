@@ -1,11 +1,13 @@
 import { Loader2, CircleAlert } from "lucide-react";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const SignUp = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
+
+  const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -30,6 +32,7 @@ export const SignUp = () => {
         return 
       }
       setError(false)
+      navigate('/sign-in')
     } catch (error) {
       setLoading(true)
       setError(true)
@@ -79,11 +82,11 @@ export const SignUp = () => {
       <div className="flex gap-4 mt-2">
         <p>Already have an account</p>
         <Link to="/sign-in">
-          <span className="text-blue-500 text-sm hover:underline">Sign in</span>
+          <span className="text-blue-500 text-sm hover:underline">Sign up</span>
         </Link>
       </div>
       {error && (
-        <div className="p-3 border-2 rounded-md border-rose-400 bg-rose-400 text-white flex gap-4 items-center">
+        <div className="mt-4 p-3 border-2 rounded-md border-rose-400 bg-rose-400 text-white flex gap-4 items-center">
           <CircleAlert className="h-4 w-4 mr-2" />
           Something went wrong
         </div>

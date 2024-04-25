@@ -1,8 +1,15 @@
-import express, { Request, Response, ErrorRequestHandler, NextFunction } from "express";
+import express, {
+  Request,
+  Response,
+  NextFunction,
+} from "express";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+
 import userRoutes from "./routes/user.route";
 import authRoutes from "./routes/auth.route";
-import dotenv from "dotenv";
+
 dotenv.config();
 
 mongoose
@@ -28,9 +35,9 @@ app.use("/api/auth", authRoutes);
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal server error";
-  return res.status(statusCode).json({ 
+  return res.status(statusCode).json({
     success: false,
     message,
-    statusCode
-   });
+    statusCode,
+  });
 });

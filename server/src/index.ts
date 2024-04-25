@@ -1,7 +1,7 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, ErrorRequestHandler, NextFunction } from "express";
 import mongoose from "mongoose";
-import userRoutes from "./routes/user.route"
-import authRoutes from "./routes/auth.route"
+import userRoutes from "./routes/user.route";
+import authRoutes from "./routes/auth.route";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -16,12 +16,21 @@ mongoose
 
 const app = express();
 
-app.use(express.json())
+app.use(express.json());
 
-
-app.listen(3000, ()=> {
-  console.log("Server is listening on port 3000")
+app.listen(3000, () => {
+  console.log("Server is listening on port 3000");
 });
 
-app.use("/api/user", userRoutes)
-app.use("/api/auth", authRoutes)
+app.use("/api/user", userRoutes);
+app.use("/api/auth", authRoutes);
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal server error";
+  return res.status(statusCode).json({ 
+    success: false,
+    message,
+    statusCode
+   });
+});

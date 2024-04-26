@@ -10,6 +10,7 @@ import {
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
+  signOut
 } from "@/redux/user/userSlice";
 
 export const Profile = () => {
@@ -65,6 +66,15 @@ export const Profile = () => {
     }
   }
 
+  const handleSignOut = async () => {
+    try {
+      await fetch(`/api/auth/signout`)
+      dispatch(signOut())
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -107,7 +117,7 @@ export const Profile = () => {
       </form>
       <div className="flex justify-between items-center mt-4">
         <span onClick={handleDelete} className="text-rose-700 cursor-pointer">Delete Account</span>
-        <span className="text-rose-700 cursor-pointer">Sign Out</span>
+        <span onClick={handleSignOut} className="text-rose-700 cursor-pointer">Sign Out</span>
       </div>
       {error && (
         <div className="mt-4 p-3 border-2 rounded-md border-rose-400 bg-rose-400 text-white flex gap-4 items-center">

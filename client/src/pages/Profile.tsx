@@ -4,6 +4,9 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
 import {
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
@@ -43,6 +46,24 @@ export const Profile = () => {
       dispatch(updateUserFailure(error))
     }
   };
+
+  const handleDelete = async () => {
+    try {
+      dispatch(deleteUserStart())
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json()
+      if(data.success === false) {
+        dispatch(deleteUserFailure(data.message))
+        return
+      }
+      dispatch(deleteUserSuccess())
+    } catch (error) {
+      dispatch(deleteUserFailure(error))
+    }
+  }
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -85,7 +106,7 @@ export const Profile = () => {
         </button>
       </form>
       <div className="flex justify-between items-center mt-4">
-        <span className="text-rose-700 cursor-pointer">Delete Account</span>
+        <span onClick={handleDelete} className="text-rose-700 cursor-pointer">Delete Account</span>
         <span className="text-rose-700 cursor-pointer">Sign Out</span>
       </div>
       {error && (

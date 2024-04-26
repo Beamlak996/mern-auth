@@ -1,13 +1,17 @@
 import { Loader2, CircleAlert } from "lucide-react";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux"
+
+import { signInStart, signInFailure, signInSuccess } from "@/redux/user/userSlice";
+
 
 export const SignIn = () => {
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const { loading, error } = useSelector((state: any)=> state?.user)
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -15,9 +19,8 @@ export const SignIn = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(false);
     try {
-      setLoading(true);
+      dispatch(signInStart())
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         body: JSON.stringify(formData),
@@ -27,17 +30,14 @@ export const SignIn = () => {
       });
       const data = await res.json();
       if (data.success === false) {
-        setError(true);
-        return;
+        dispatch(signInFailure(data))
+        return
       }
-      setError(false);
+      dispatch(signInSuccess(data))
       navigate('/')
     } catch (error) {
-      setLoading(true);
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
+      dispatch(signInFailure(error))
+    } 
   };
 
   return (
